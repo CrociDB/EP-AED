@@ -34,4 +34,21 @@ void excluirPalavra(NO *frase, NO *palavra)
 // somente para turma 94
 NO *codificar (NO *frase){
      // implemente aqui a funcao solicitada ou deixe como esta (sem apagar)
+	NO* a = copiar(frase); //Copia do NO frase passado por parametro
+}
+
+NO* copiar(NO* no){
+	if(!no->prox){
+		NO* novo = (NO*) malloc(sizeof(NO));
+		novo->chave = no->chave;
+		novo->prox = no->prox;
+		return novo;
+	}
+	else{
+		NO* novo = (NO*) malloc(sizeof(NO));
+		novo->chave = no->chave;
+		novo->prox = copiar(no->prox);
+		return novo;
+	}
+	return NULL;
 }
