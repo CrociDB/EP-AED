@@ -6,7 +6,7 @@
 // programa nao passara nos testes.
 
 char *aluno1() {
-	return ("XXXXXXXXXXXX");  // escreva aqui o seu nome
+	return ("Filipe Marques Pereira");  // escreva aqui o seu nome
 }
 
 char *aluno2() {
@@ -14,7 +14,7 @@ char *aluno2() {
 }
 
 char *nrousp1() {
-	return ("XXXXXXX"); // escreva aqui o seu nro USP
+	return ("6777105"); // escreva aqui o seu nro USP
 }
 
 char *nrousp2() {
@@ -22,7 +22,7 @@ char *nrousp2() {
 }
 
 char *turma() {
-	return ("xx"); // escreva aqui o nro da sua turma com 2 digitos
+	return ("94"); // escreva aqui o nro da sua turma com 2 digitos
 }
 
 // somente para turma 04
@@ -32,7 +32,6 @@ void excluirPalavra(NO *frase, NO *palavra)
 }
 
 // somente para turma 94
-NO *codificar (NO *frase)
-{
+NO *codificar (NO *frase){
      // implemente aqui a funcao solicitada ou deixe como esta (sem apagar)
 }
