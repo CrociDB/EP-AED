@@ -10,7 +10,7 @@ char *aluno1() {
 }
 
 char *aluno2() {
-	return ("XXXXXXXXXXXX");  // escreva aqui o seu nome
+	return ("Bruno Croci de Oliveira");  // escreva aqui o seu nome
 }
 
 char *nrousp1() {
@@ -18,7 +18,7 @@ char *nrousp1() {
 }
 
 char *nrousp2() {
-	return ("XXXXXXX"); // escreva aqui o seu nro USP
+	return ("6907392"); // escreva aqui o seu nro USP
 }
 
 char *turma() {
