@@ -61,14 +61,14 @@ NO *inverterTudo(NO* no){
             novo->prox = NULL;
             if(ant == NULL) return novo;
             else{
-                i++;
+                pos++;
                 atual = ant;
                 ant = atual->prox;
                 p = novo;
             }
         }
         else{
-            NO* novo (NO*) malloc(sizeof(NO));
+            NO* novo = (NO*) malloc(sizeof(NO));
             novo->letra = atual->letra;
             novo->prox = p;
             if(ant == NULL) return novo;
@@ -91,10 +91,10 @@ NO* inverteEntreDoisNOs(NO *inicio, NO *fim){
     NO *ant = atual->prox;
 
     //Para o NO inicio
-    NO *novo = (NO*) malloc(sizeof(NO));
-    novo->letra = inicio->letra;
-    novo->prox = NULL;
-    NO *p = novo;
+    NO *first = (NO*) malloc(sizeof(NO));
+    first->letra = inicio->letra;
+    first->prox = NULL;
+    NO *p = first;
 
     //Para os NOs entre NO inicio e NO fim
     while(atual != fim){
@@ -107,10 +107,10 @@ NO* inverteEntreDoisNOs(NO *inicio, NO *fim){
     }
 
     //Para o NO fim
-    NO *novo = (NO*) malloc(sizeof(NO));
-    novo->letra = atual->letra;
-    novo->prox = p;
-    return novo;
+    NO *last = (NO*) malloc(sizeof(NO));
+    last->letra = atual->letra;
+    last->prox = p;
+    return last;
 }
 
 // somente para turma 94
