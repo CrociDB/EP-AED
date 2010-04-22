@@ -35,20 +35,20 @@ NO *copiar(NO* no){
 	if(!no->prox){
 		NO* novo = (NO*) malloc(sizeof(NO));
 		novo->letra = no->letra;
-		novo->letra = no->letra
-                free(no);
+		novo->letra = no->letra;
 		return novo;
 	}
 	else{
 		NO* novo = (NO*) malloc(sizeof(NO));
 		novo->letra = no->letra;
 		novo->prox = copiar(no->prox);
-                free(no);
 		return novo;
 	}
 	return NULL;
 }
 
+//Inverte toda a lista ligada de NOs
+//a partir do NO no (primeiro no)
 NO *inverterTudo(NO* no){
     int pos = 1;
     NO* ant = no->prox;
@@ -78,23 +78,25 @@ NO *inverterTudo(NO* no){
                 p = novo;
             }
         }
-        return NULL;
     }
+	return p;
 }
 
-//Precisa ligar o novo inicio dado pelo retorno
-//com o que vinha antes do NO *inicio e o mesmo para
-//o que vinha depois do NO *fim que agora eh o
-//ultimo elemento (o que aponta NULL)
+//Ligar o NO inicio que foi passado como para
+//metro com o NO p (retorno da função) e passar um
+//ponteiro por referencia para obter o elemento
+//que se ligará ao NO fim 
 NO* inverteEntreDoisNOs(NO *inicio, NO *fim){
     NO *atual = inicio->prox;
     NO *ant = atual->prox;
 
-    //Para o NO inicio
+    //Para o NO inicio->prox
     NO *first = (NO*) malloc(sizeof(NO));
-    first->letra = inicio->letra;
+    first->letra = atual->letra;
     first->prox = NULL;
     NO *p = first;
+	atual = ant;
+	ant = atual->prox;
 
     //Para os NOs entre NO inicio e NO fim
     while(atual != fim){
@@ -105,12 +107,18 @@ NO* inverteEntreDoisNOs(NO *inicio, NO *fim){
         atual = ant;
         ant = atual->prox;
     }
+    return p;
+}
 
-    //Para o NO fim
-    NO *last = (NO*) malloc(sizeof(NO));
-    last->letra = atual->letra;
-    last->prox = p;
-    return last;
+//Destroi a lista ligada de NOs
+void destruir(NO *no){
+	NO* atual = no;
+    NO* prox;
+    while (atual) {
+        prox = atual->prox;
+        free(atual);
+        atual = prox;
+    }
 }
 
 // somente para turma 94
@@ -125,7 +133,8 @@ NO *codificar (NO *frase){
     //2ª etapa: pronta!
     inverterTudo(copia);
 
-    //Nao prestei atenção a coleta de lixo (free()) :/
+    //Libera memoria deletando o NO copia =)
+	destruir(copia);
 }
 
 
