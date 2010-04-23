@@ -47,78 +47,108 @@ NO *copiar(NO* no){
 	return NULL;
 }
 
-//Inverte toda a lista ligada de NOs
-//a partir do NO no (primeiro no)
-NO *inverterTudo(NO* no){
-    int pos = 1;
-    NO* ant = no->prox;
-    NO* atual = no;
-    NO* p;
-    while(atual){
-        if(pos == 1){
-            NO* novo = (NO*) malloc(sizeof(NO));
-            novo->letra = atual->letra;
-            novo->prox = NULL;
-            if(ant == NULL) return novo;
-            else{
-                pos++;
-                atual = ant;
-                ant = atual->prox;
-                p = novo;
-            }
-        }
-        else{
-            NO* novo = (NO*) malloc(sizeof(NO));
-            novo->letra = atual->letra;
-            novo->prox = p;
-            if(ant == NULL) return novo;
-            else{
-                atual = ant;
-                ant = atual->prox;
-                p = novo;
-            }
-        }
-    }
-	return p;
+void inverterTudo(NO **lista)
+{
+	NO *atual = (*lista)->prox;
+	NO *ant = *lista;
+	
+	NO *prox = NULL;
+	
+	if (atual)
+		prox = atual->prox;
+		
+	while (atual)
+	{
+		atual->prox = ant;
+		
+		ant = atual;
+		atual = prox;
+	
+		if (prox)
+		{
+			prox = prox->prox;
+		}
+	}
+	
+	(*lista)->prox = NULL;
+	*lista = ant;
 }
 
-//Ligar o NO inicio que foi passado como para
-//metro com o NO p (retorno da função) e passar um
-//ponteiro por referencia para obter o elemento
-//que se ligará ao NO fim 
-NO* inverteEntreDoisNOs(NO *inicio, NO *fim){
-    NO *atual = inicio->prox;
-    NO *ant = atual->prox;
-
-    //Para o NO inicio->prox
-    NO *first = (NO*) malloc(sizeof(NO));
-    first->letra = atual->letra;
-    first->prox = NULL;
-    NO *p = first;
-	atual = ant;
-	ant = atual->prox;
-
-    //Para os NOs entre NO inicio e NO fim
-    while(atual != fim){
-        NO *novo = (NO*) malloc(sizeof(NO));
-        novo->letra = atual->letra;
-        novo->prox = p;
-        p = novo;
-        atual = ant;
-        ant = atual->prox;
-    }
-    return p;
+void inverteLista(NO **p_inicio, NO **p_ant, int num)
+{
+	NO *atual = (*p_inicio)->prox;
+	NO *ant = *p_inicio;
+	
+	NO *prox = atual->prox;
+	
+	int i = 0;
+	
+	//printf("--Num: %d\n", num);
+	//print_test(*p_inicio, num+1);
+	
+	while (i < num-1)
+	{
+		atual->prox = ant;
+		
+		ant = atual;
+		atual = prox;
+	
+		if (prox)
+		{
+			prox = prox->prox;
+		}
+		
+		i++;
+	}
+	
+	if ((*p_ant))
+	{
+		(*p_ant)->prox = ant;
+	}
+	
+	(*p_inicio)->prox = atual;
+	
+	//print_test(*p_inicio, num+1);
 }
 
-//Destroi a lista ligada de NOs
-void destruir(NO *no){
-	NO* atual = no;
-    NO* prox;
-    while (atual) {
-        prox = atual->prox;
-        free(atual);
-        atual = prox;
-    }
+int numNaoVogal(NO *no)
+{
+	NO *p = no;
+	int num = 0;
+	
+	while (p)
+	{
+		if (p->letra == 'a' || p->letra == 'e' || p->letra == 'i' || p->letra == 'o' || p->letra == 'u' || 
+			p->letra == 'A' || p->letra == 'E' || p->letra == 'I' || p->letra == 'O' || p->letra == 'U')
+		{
+			break;
+		}
+		p = p->prox;
+		num++;
+	}
+	
+	return num;
+}
+
+
+void inverterNaoVogal(NO *lista)
+{
+	NO *p = lista;
+	NO *ant = NULL;
+	
+	while (p)
+	{
+		int num = numNaoVogal(p);
+		//printf("Out: %d\n", num);
+		
+		if (num > 1)
+		{
+			inverteLista(&p, &ant, num);
+		}
+		
+		ant = p;
+		p = p->prox;
+	}
 }
 
 // somente para turma 94
@@ -129,12 +159,15 @@ NO *codificar (NO *frase){
     NO* copia = copiar(frase);
 
     //1ª etapa:
+    inverterNaoVogal(copia);
 
-    //2ª etapa: pronta!
-    inverterTudo(copia);
+    //2ª etapa:
+    inverterTudo(&copia);
 
     //Libera memoria deletando o NO copia =)
-	destruir(copia);
+	//destruir(copia);
+	
+	return copia;
 }
 
 

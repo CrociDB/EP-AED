@@ -31,14 +31,23 @@ void imprime_lista_frase(NO *head)
 {
 	NO *p = head;
 	
-	printf("\n");
-	
 	while (p) {
 		printf("%c", p->letra);
 		p = p->prox;
 	}
 	
 	printf("\n");
+}
+
+//Destroi a lista ligada de NOs
+void destruir(NO *no){
+	NO* atual = no;
+    NO* prox;
+    while (atual) {
+        prox = atual->prox;
+        free(atual);
+        atual = prox;
+    }
 }
 
 int main() 
@@ -54,5 +63,13 @@ int main()
     NO *lista;
     init_lista_frase(&lista, "ESTRUTURAS DE DADOS E MUITO LEGAL.");
     
+    printf("Entrada: ");
     imprime_lista_frase(lista);
+    
+    printf("Saida: ");
+    NO *outra = codificar(lista);
+    imprime_lista_frase(outra);
+    
+    destruir(outra);
+    destruir(lista);
 }
