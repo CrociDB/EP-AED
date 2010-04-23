@@ -1,3 +1,7 @@
 #!/bin/sh
 
-g++ main.cpp -o main && ./main
+make && echo '
+
+Executando:
+
+' && ./trabalho
