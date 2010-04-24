@@ -50,8 +50,8 @@ NO *copiar(NO* no){
 void inverterTudo(NO **lista)
 {
 	NO *atual = (*lista)->prox;
-	NO *ant = *lista;
-	
+	NO *ant = (*lista);
+
 	NO *prox = NULL;
 	
 	if (atual)
@@ -79,7 +79,7 @@ void inverteLista(NO **p_inicio, NO **p_ant, int num)
 	NO *atual = (*p_inicio)->prox;
 	NO *ant = *p_inicio;
 	
-	NO *prox = atual->prox;
+	NO *next = atual->prox;
 	
 	int i = 0;
 	
@@ -91,11 +91,11 @@ void inverteLista(NO **p_inicio, NO **p_ant, int num)
 		atual->prox = ant;
 		
 		ant = atual;
-		atual = prox;
+		atual = next;
 	
-		if (prox)
+		if (next)
 		{
-			prox = prox->prox;
+			next = next->prox;
 		}
 		
 		i++;
@@ -111,6 +111,14 @@ void inverteLista(NO **p_inicio, NO **p_ant, int num)
 	//print_test(*p_inicio, num+1);
 }
 
+bool ehVogal(NO *no){
+	if (no->letra == 'a' || no->letra == 'e' || no->letra == 'i' || no->letra == 'o' || no->letra == 'u' || 
+		no->letra == 'A' || no->letra == 'E' || no->letra == 'I' || no->letra == 'O' || no->letra == 'U'){
+		return true;
+	}
+	return false;
+}
+
 int numNaoVogal(NO *no)
 {
 	NO *p = no;
@@ -118,11 +126,7 @@ int numNaoVogal(NO *no)
 	
 	while (p)
 	{
-		if (p->letra == 'a' || p->letra == 'e' || p->letra == 'i' || p->letra == 'o' || p->letra == 'u' || 
-			p->letra == 'A' || p->letra == 'E' || p->letra == 'I' || p->letra == 'O' || p->letra == 'U')
-		{
-			break;
-		}
+		if (ehVogal(p)) break;
 		p = p->prox;
 		num++;
 	}
@@ -133,8 +137,10 @@ int numNaoVogal(NO *no)
 
 void inverterNaoVogal(NO *lista)
 {
-	NO *p = lista;
-	NO *ant = NULL;
+	NO *p = lista->prox;
+	NO *anterior = lista;
+	//NO *p = lista;
+	//NO *anterior = NULL;
 	
 	while (p)
 	{
@@ -143,12 +149,24 @@ void inverterNaoVogal(NO *lista)
 		
 		if (num > 1)
 		{
-			inverteLista(&p, &ant, num);
+			inverteLista(&p, &anterior, num);
 		}
 		
-		ant = p;
+		anterior = p;
 		p = p->prox;
 	}
+}
+
+void gambiarra(NO **no){
+	NO *vogal = (*no);
+	NO *first = (*no);
+	NO *ant = NULL;
+	while(!ehVogal(vogal)){
+		ant = vogal;
+		vogal = vogal->prox;
+	}
+	ant->prox = first;
+	first->prox = vogal;
 }
 
 // somente para turma 94
@@ -160,6 +178,7 @@ NO *codificar (NO *frase){
 
     //1ª etapa:
     inverterNaoVogal(copia);
+	if(!ehVogal(copia)) gambiarra(&copia);
 
     //2ª etapa:
     inverterTudo(&copia);
