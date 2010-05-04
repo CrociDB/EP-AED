@@ -31,20 +31,68 @@ void excluirPalavra(NO *frase, NO *palavra)
      // implemente aqui a funcao solicitada ou deixe como esta (sem apagar)
 }
 
+
+int numNaoVogal(NO *no)
+{
+	NO *p = no;
+	int num = 0;
+	
+	while (p)
+	{
+		if (p->letra == 'a' || p->letra == 'e' || p->letra == 'i' || p->letra == 'o' || p->letra == 'u' || 
+			p->letra == 'A' || p->letra == 'E' || p->letra == 'I' || p->letra == 'O' || p->letra == 'U' || p->letra == '\r')
+		{
+			break;
+		}
+		p = p->prox;
+		num++;
+	}
+	
+	return num;
+}
+
+
 NO *copiar(NO* no){
+	NO* novo = (NO*) malloc(sizeof(NO));
+	novo->letra = no->letra;
 	if(!no->prox){
-		NO* novo = (NO*) malloc(sizeof(NO));
 		novo->letra = no->letra;
-		novo->letra = no->letra;
-		return novo;
 	}
 	else{
-		NO* novo = (NO*) malloc(sizeof(NO));
-		novo->letra = no->letra;
 		novo->prox = copiar(no->prox);
-		return novo;
 	}
-	return NULL;
+	return novo;
+}
+
+NO *adicionaNoCabeca(NO *lista) {
+
+	int num = numNaoVogal(lista);
+
+	if (num > 1)
+	{	
+		NO *head = (NO*) malloc(sizeof(NO));	
+		head->letra = '\r';
+		head->prox = lista;
+		
+		return head;
+	}
+	
+	return lista;
+	
+}
+
+NO *removeNoCabeca(NO *lista) {
+
+	if (lista->letra == '\r')
+	{	
+		NO *p = lista;
+		lista = lista->prox;
+		
+		free(p);
+	}
+	
+	return lista;
+	
 }
 
 void inverterTudo(NO **lista)
@@ -111,25 +159,6 @@ void inverteLista(NO **p_inicio, NO **p_ant, int num)
 	//print_test(*p_inicio, num+1);
 }
 
-int numNaoVogal(NO *no)
-{
-	NO *p = no;
-	int num = 0;
-	
-	while (p)
-	{
-		if (p->letra == 'a' || p->letra == 'e' || p->letra == 'i' || p->letra == 'o' || p->letra == 'u' || 
-			p->letra == 'A' || p->letra == 'E' || p->letra == 'I' || p->letra == 'O' || p->letra == 'U')
-		{
-			break;
-		}
-		p = p->prox;
-		num++;
-	}
-	
-	return num;
-}
-
 
 void inverterNaoVogal(NO *lista)
 {
@@ -157,15 +186,18 @@ NO *codificar (NO *frase){
 	
     //Copia do NO frase passado por parametro
     NO* copia = copiar(frase);
+    
+    // Gambiarra =D
+    copia = adicionaNoCabeca(copia);
 
     //1ª etapa:
     inverterNaoVogal(copia);
+    
+    // Gambiarra (parte II) =D
+    copia = removeNoCabeca(copia);
 
     //2ª etapa:
     inverterTudo(&copia);
-
-    //Libera memoria deletando o NO copia =)
-	//destruir(copia);
 	
 	return copia;
 }
