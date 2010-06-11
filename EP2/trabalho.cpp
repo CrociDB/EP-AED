@@ -44,6 +44,7 @@ void um_filho(NO* atual, NO* pai){
 		if(atual->esq) pai->dir = atual->esq;
 		else pai->dir = atual->dir;	
 	}
+	free(atual);
 }
 void sem_filho(NO* atual, NO* pai){
 	if(pai->esq == atual) pai->esq = NULL;
