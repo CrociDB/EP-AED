@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <malloc.h>
 #include <string.h>
 #include <ctype.h>
@@ -9,7 +8,8 @@
 typedef struct estr
 {
         int chave;
-        estr *prox;
+        estr *esq;
+	estr *dir;
 } NO;
 
 // funcoes a implementar em trabalho.cpp
