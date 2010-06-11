@@ -31,8 +31,42 @@ bool excluirAncestrais(NO **raiz, int chave)
      // implemente aqui a funcao solicitada ou deixe como esta (sem apagar)
 }
 
+void sem_filho(NO* atual, NO* pai){
+	if(pai->esq == atual) pai->esq = NULL;
+	else pai->dir = NULL;
+	free(atual);
+}
+
+bool percorre_abb(NO* atual, NO* pai, int contador_de_nivel, int nivel_desejado){
+	//cheguei no nivel	
+	if(contador_de_nivel == nivel_desejado){
+		if(!atual) return false;		
+		//se o nivel existir faca uma das tres
+		else if(atual->esq && atual->dir){
+			dois_filhos(atual, pai);	
+		}
+		else if(atual->esq || atual->dir){
+			um_filho(atual, pai);		
+		}
+		else sem_filho(atual, pai);
+		return true;	
+	}
+	else{	
+		bool esq = false, dir = false;
+		contador_de_nivel++;
+		if(atual->esq){
+			esq = percorre_abb(atual->esq, atual, contador_de_nivel, nivel_desejado);	
+		}
+		if(atual->dir){
+			dir = percorre_abb(atual->dir, atual, contador_de_nivel, nivel_desejado);		
+		}
+		
+		return esq || dir;
+	}
+}
+
 // somente para turma 94
 bool excluirNivel(NO **raiz, int n)
-{
-     // implemente aqui a funcao solicitada ou deixe como esta (sem apagar)
+{	
+    return percorre_abb(*raiz, NULL, 1, n);
 }
