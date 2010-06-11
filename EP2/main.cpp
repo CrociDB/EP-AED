@@ -20,7 +20,7 @@ int main()
 	printf("Árvore ANTES da exclusao:\n\n");
 	ident(raiz, 0);
 
-	//excluirNivel(&raiz, 4);
+	excluirNivel(&raiz, 4);
 
 	printf("Árvore APOS da exclusao:\n\n");
 	ident(raiz, 0);
