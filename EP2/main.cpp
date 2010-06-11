@@ -4,6 +4,7 @@
 
 NO* criarNovoNo(int ch);
 bool inserirAux(NO *raiz, int ch);
+void criar_abb_aleatorio(NO **raiz, int num);
 void criar_abb(NO **raiz, int num);
 
 void ident(NO *p, int h);
@@ -16,6 +17,12 @@ int main()
 
 	criar_abb(&raiz, 15);
 
+	printf("Árvore ANTES da exclusao:\n\n");
+	ident(raiz, 0);
+
+	excluirNivel(&raiz, 4);
+
+	printf("Árvore APOS da exclusao:\n\n");
 	ident(raiz, 0);
 
 }
@@ -44,6 +51,19 @@ bool inserirAux(NO *raiz, int ch){
 }
 
 void criar_abb(NO **raiz, int num)
+{
+
+	(*raiz) = criarNovoNo(5);
+
+	inserirAux(*raiz, 1);
+	inserirAux(*raiz, 3);
+	inserirAux(*raiz, 5);
+	inserirAux(*raiz, 2);
+	inserirAux(*raiz, 6);
+	inserirAux(*raiz, 7);
+}
+
+void criar_abb_aleatorio(NO **raiz, int num)
 {
 	srand(time(NULL));
 
