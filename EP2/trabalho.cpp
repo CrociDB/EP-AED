@@ -31,6 +31,13 @@ bool excluirAncestrais(NO **raiz, int chave)
      // implemente aqui a funcao solicitada ou deixe como esta (sem apagar)
 }
 
+void dois_filhos(NO* atual, NO* pai){
+
+}
+
+void um_filho(NO* atual, NO* pai){
+
+}
 void sem_filho(NO* atual, NO* pai){
 	if(pai->esq == atual) pai->esq = NULL;
 	else pai->dir = NULL;
