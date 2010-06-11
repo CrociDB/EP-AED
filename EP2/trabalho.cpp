@@ -36,7 +36,14 @@ void dois_filhos(NO* atual, NO* pai){
 }
 
 void um_filho(NO* atual, NO* pai){
-
+	if(pai->esq == atual){
+		if(atual->esq) pai->esq = atual->esq;
+		else pai->esq = atual->dir;	
+	} 
+	else{
+		if(atual->esq) pai->dir = atual->esq;
+		else pai->dir = atual->dir;	
+	}
 }
 void sem_filho(NO* atual, NO* pai){
 	if(pai->esq == atual) pai->esq = NULL;
