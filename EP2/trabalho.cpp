@@ -18,7 +18,7 @@ char *nrousp1() {
 }
 
 char *nrousp2() {
-	return ("69071392"); // escreva aqui o seu nro USP
+	return ("6907392"); // escreva aqui o seu nro USP
 }
 
 char *turma() {
