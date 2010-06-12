@@ -12,19 +12,45 @@ void ident(NO *p, int h);
 void exibe_abb_em_ordem(NO *raiz);
 
 int main() 
-{
+{	char resp = 'h';
+	int num = 0;
+	
+	printf("Se desejar arvore aleatoria digite 'a'\nCaso contrário digite outra letra\n");
+	scanf("%c",&resp);
+	
 	NO *raiz = NULL; 
+	if(resp == 'a'){
+		printf("Qual o numero de NOs desejados, além da raiz?\n");
+		scanf("%i",&num);
+		
+		criar_abb_aleatorio(&raiz, num);
+		
+		printf("Árvore ANTES da exclusao:\n\n");
+		ident(raiz, 0);
+		
+		printf("Qual nivel deve ser excluído?\n");
+		scanf("%i",&num);
+		excluirNivel(&raiz, num);
 
-	criar_abb(&raiz, 15);
+		printf("Árvore APOS da exclusao:\n\n");
+		ident(raiz, 0);
+	}
+	else{
+		printf("Use -1 para raiz sem filhos, 0  para raiz com um filho,\n1 para raiz com dois filhos, qualquer outro numero irá gerar arvore geral\n");
+		scanf("%i",&num);
+		criar_abb(&raiz, num);
 
-	printf("Árvore ANTES da exclusao:\n\n");
-	ident(raiz, 0);
+		printf("Árvore ANTES da exclusao:\n\n");
+		ident(raiz, 0);
 
-	excluirNivel(&raiz, 1);
+		printf("Qual nivel deve ser excluído?\n");
+		scanf("%i",&num);
+		excluirNivel(&raiz, num);
 
-	printf("Árvore APOS da exclusao:\n\n");
-	ident(raiz, 0);
-
+		printf("Árvore APOS da exclusao:\n\n");
+		ident(raiz, 0);
+		
+	}
 }
 
 NO* criarNovoNo(int ch){
@@ -51,16 +77,34 @@ bool inserirAux(NO *raiz, int ch){
 }
 
 void criar_abb(NO **raiz, int num)
-{
+{	
+	//teste para arvore com um nivel
+	if(num == -1){
+		(*raiz) == criarNovoNo(5);
+	}
+	//teste para arvore com dois niveis, raiz e um filho
+	else if(num == 0){
+		(*raiz) = criarNovoNo(5);
+		inserirAux(*raiz, 1);
+	}	
+	//teste para arvore com dois niveis, raiz e dois filhos
+	else if(num == 1){
+		(*raiz) = criarNovoNo(5);
+		inserirAux(*raiz, 1);
+		inserirAux(*raiz, 3);
+	}
+	//teste para arvore geral
+	else {
+		(*raiz) = criarNovoNo(5);
 
-	(*raiz) = criarNovoNo(5);
-
-	//inserirAux(*raiz, 1);
-	//inserirAux(*raiz, 3);
-	//inserirAux(*raiz, 5);
-	//inserirAux(*raiz, 2);
-	//inserirAux(*raiz, 6);
-	//inserirAux(*raiz, 7);
+		inserirAux(*raiz, 1);
+		inserirAux(*raiz, 3);
+		inserirAux(*raiz, 5);
+		inserirAux(*raiz, 2);
+		inserirAux(*raiz, 6);
+		inserirAux(*raiz, 7);
+		
+	}
 }
 
 void criar_abb_aleatorio(NO **raiz, int num)
