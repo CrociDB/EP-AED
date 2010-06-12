@@ -20,7 +20,7 @@ int main()
 	printf("Árvore ANTES da exclusao:\n\n");
 	ident(raiz, 0);
 
-	excluirNivel(&raiz, 3);
+	excluirNivel(&raiz, 1);
 
 	printf("Árvore APOS da exclusao:\n\n");
 	ident(raiz, 0);
@@ -55,12 +55,12 @@ void criar_abb(NO **raiz, int num)
 
 	(*raiz) = criarNovoNo(5);
 
-	inserirAux(*raiz, 1);
-	inserirAux(*raiz, 3);
-	inserirAux(*raiz, 5);
-	inserirAux(*raiz, 2);
-	inserirAux(*raiz, 6);
-	inserirAux(*raiz, 7);
+	//inserirAux(*raiz, 1);
+	//inserirAux(*raiz, 3);
+	//inserirAux(*raiz, 5);
+	//inserirAux(*raiz, 2);
+	//inserirAux(*raiz, 6);
+	//inserirAux(*raiz, 7);
 }
 
 void criar_abb_aleatorio(NO **raiz, int num)

@@ -36,7 +36,8 @@ void dois_filhos(NO* atual, NO* pai){
 }
 
 void um_filho(NO* atual, NO* pai){
-	if(pai->esq == atual){
+	if (pai->esq == NULL && pai->dir == NULL) printf("i remove it\n");
+	else if(pai->esq == atual){
 		if(atual->esq) pai->esq = atual->esq;
 		else pai->esq = atual->dir;	
 	} 
@@ -45,10 +46,14 @@ void um_filho(NO* atual, NO* pai){
 		else pai->dir = atual->dir;	
 	}
 	free(atual);
+	printf("done\n");
 }
 void sem_filho(NO* atual, NO* pai){
-	if(pai->esq == atual) pai->esq = NULL;
-	else pai->dir = NULL;
+	if (pai->esq == NULL && pai->dir == NULL){
+		printf("freedom\n");
+	}
+	else if(pai->esq == atual) pai->esq = NULL;
+	else if(pai->dir == atual) pai->dir = NULL;
 	free(atual);
 }
 
@@ -83,5 +88,9 @@ bool percorre_abb(NO* atual, NO* pai, int contador_de_nivel, int nivel_desejado)
 // somente para turma 94
 bool excluirNivel(NO **raiz, int n)
 {	
-    return percorre_abb(*raiz, NULL, 1, n);
+	NO* pai_raiz = (NO*) malloc(sizeof(NO));
+	pai_raiz->esq = NULL;
+	pai_raiz->dir = NULL;
+	pai_raiz->chave = -1;
+	return percorre_abb(*raiz, pai_raiz, 1, n);
 }
