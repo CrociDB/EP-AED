@@ -11,8 +11,8 @@ void ident(NO *p, int h);
 
 void exibe_abb_em_ordem(NO *raiz);
 
-int main() 
-{	char resp = 'h';
+int main() {
+	char resp = 'h';
 	int num = 0;
 	
 	printf("Se desejar arvore aleatoria digite 'a'\nCaso contrário digite outra letra\n");
@@ -36,7 +36,7 @@ int main()
 		ident(raiz, 0);
 	}
 	else{
-		printf("Use -1 para raiz sem filhos, 0  para raiz com um filho,\n1 para raiz com dois filhos, qualquer outro numero irá gerar arvore geral\n");
+		printf("Use -1 para raiz sem filhos, 0  para raiz com um filho,\n1 para raiz com dois filhos, qualquer outro numero irá gerar arvore geral\nQue contém todos os casos\n");
 		scanf("%i",&num);
 		criar_abb(&raiz, num);
 
@@ -91,7 +91,7 @@ void criar_abb(NO **raiz, int num)
 	else if(num == 1){
 		(*raiz) = criarNovoNo(5);
 		inserirAux(*raiz, 1);
-		inserirAux(*raiz, 3);
+		inserirAux(*raiz, 8);
 	}
 	//teste para arvore geral
 	else {
@@ -99,10 +99,10 @@ void criar_abb(NO **raiz, int num)
 
 		inserirAux(*raiz, 1);
 		inserirAux(*raiz, 3);
-		inserirAux(*raiz, 5);
-		inserirAux(*raiz, 2);
 		inserirAux(*raiz, 6);
 		inserirAux(*raiz, 7);
+		inserirAux(*raiz, 2);
+		inserirAux(*raiz, 4);
 		
 	}
 }

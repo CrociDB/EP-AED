@@ -31,8 +31,12 @@ bool excluirAncestrais(NO **raiz, int chave)
      // implemente aqui a funcao solicitada ou deixe como esta (sem apagar)
 }
 
-void dois_filhos(NO* atual, NO* pai){
-
+int maior_esquerda(NO** p, NO** pai){
+	while((*p)->dir){
+		pai = p;
+		*p = (*p)->dir;
+	}
+	return (*p)->chave;
 }
 
 void um_filho(NO* atual, NO* pai){
@@ -57,13 +61,25 @@ void sem_filho(NO* atual, NO* pai){
 	free(atual);
 }
 
+void dois_filhos(NO* atual){
+	int chave = -1;
+	NO* p = atual->esq;
+	NO* p2 = atual;
+	chave = maior_esquerda(&p, &p2);
+	atual->chave = chave;
+	if(p->esq || p->dir){
+		um_filho(p, p2);
+	}
+	else sem_filho(p, p2);
+}
+
 bool percorre_abb(NO* atual, NO* pai, int contador_de_nivel, int nivel_desejado){
 	//cheguei no nivel	
 	if(contador_de_nivel == nivel_desejado){
 		if(!atual) return false;		
 		//se o nivel existir faca uma das tres
 		else if(atual->esq && atual->dir){
-			dois_filhos(atual, pai);	
+			dois_filhos(atual);	
 		}
 		else if(atual->esq || atual->dir){
 			um_filho(atual, pai);		
