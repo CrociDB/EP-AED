@@ -31,70 +31,57 @@ bool excluirAncestrais(NO **raiz, int chave)
      // implemente aqui a funcao solicitada ou deixe como esta (sem apagar)
 }
 
-int maior_esquerda(NO** p, NO** pai){
-	while((*p)->dir){
-		pai = p;
-		*p = (*p)->dir;
+void __bst_research_node(NO **p, NO **aux)
+{
+	if (!(*p)->dir)
+	{
+		(*aux)->chave = (*p)->chave;
+		if (!(*p)->esq)
+		{
+			*aux = *p;
+			*p = NULL;
+		}
+		else {
+			*aux = *p;
+			*p = (*p)->esq;
+		}
 	}
-	return (*p)->chave;
+	else
+		__bst_research_node(&(*p)->dir, aux);
 }
 
-void um_filho(NO* atual, NO* pai){
-	if (pai->esq == NULL && pai->dir == NULL) printf("i remove it\n");
-	else if(pai->esq == atual){
-		if(atual->esq) pai->esq = atual->esq;
-		else pai->esq = atual->dir;	
-	} 
-	else{
-		if(atual->esq) pai->dir = atual->esq;
-		else pai->dir = atual->dir;	
-	}
-	free(atual);
-	printf("done\n");
-}
-void sem_filho(NO* atual, NO* pai){
-	if (pai->esq == NULL && pai->dir == NULL){
-		printf("freedom\n");
-	}
-	else if(pai->esq == atual) pai->esq = NULL;
-	else if(pai->dir == atual) pai->dir = NULL;
-	free(atual);
+
+bool __bst_remove_node(NO **p)
+{
+	// Now I know I have to delete this NODE...
+	NO *aux = *p;
+	
+	if (!(*p)->esq) *p = (*p)->dir;
+	else if (!(*p)->dir) *p = (*p)->esq;
+	else __bst_research_node(&((*p)->esq), &aux);
+	
+	free(aux);
+	
+	return true;
 }
 
-void dois_filhos(NO* atual){
-	int chave = -1;
-	NO* p = atual->esq;
-	NO* p2 = atual;
-	chave = maior_esquerda(&p, &p2);
-	atual->chave = chave;
-	if(p->esq || p->dir){
-		um_filho(p, p2);
-	}
-	else sem_filho(p, p2);
-}
-
-bool percorre_abb(NO* atual, NO* pai, int contador_de_nivel, int nivel_desejado){
+bool percorre_abb(NO** atual, int contador_de_nivel, int nivel_desejado){
 	//cheguei no nivel	
+	
+	if(!atual) return false;
+	
 	if(contador_de_nivel == nivel_desejado){
-		if(!atual) return false;		
-		//se o nivel existir faca uma das tres
-		else if(atual->esq && atual->dir){
-			dois_filhos(atual);	
-		}
-		else if(atual->esq || atual->dir){
-			um_filho(atual, pai);		
-		}
-		else sem_filho(atual, pai);
-		return true;	
+		
+		return __bst_remove_node(atual);
 	}
 	else{	
 		bool esq = false, dir = false;
 		contador_de_nivel++;
-		if(atual->esq){
-			esq = percorre_abb(atual->esq, atual, contador_de_nivel, nivel_desejado);	
+		if((*atual)->esq){
+			esq = percorre_abb(&(*atual)->esq, contador_de_nivel, nivel_desejado);	
 		}
-		if(atual->dir){
-			dir = percorre_abb(atual->dir, atual, contador_de_nivel, nivel_desejado);		
+		if((*atual)->dir){
+			dir = percorre_abb(&(*atual)->dir, contador_de_nivel, nivel_desejado);		
 		}
 		
 		return esq || dir;
@@ -104,9 +91,5 @@ bool percorre_abb(NO* atual, NO* pai, int contador_de_nivel, int nivel_desejado)
 // somente para turma 94
 bool excluirNivel(NO **raiz, int n)
 {	
-	NO* pai_raiz = (NO*) malloc(sizeof(NO));
-	pai_raiz->esq = NULL;
-	pai_raiz->dir = NULL;
-	pai_raiz->chave = -1;
-	return percorre_abb(*raiz, pai_raiz, 1, n);
+	return percorre_abb(raiz, 1, n);
 }
