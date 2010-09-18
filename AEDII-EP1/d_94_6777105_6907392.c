@@ -215,7 +215,9 @@ int main (int argc, char *argv[]) {
 	//ordernar as arestas de E por peso e w nao descrescente
 	//for cada aresta (u,v) de E, em rodem de peso não descrescente
 	//	do if Find_Set(u) != Find_Set(v)
-	//		then A = Union(A, (u,v))
+	//		then
+	//			A = A + {(u,v)} 
+	// 			Union(u,v)
 	//return A
 	
 	//Entendi menos ainda este daqui
