@@ -40,13 +40,30 @@ typedef struct tedgearray {
 /* Create_DisjointSet: Inicializa a estrutura S, criando conjuntos 
    unitarios */
 void Create_DisjointSet(tdisjointset *S, int qtsets){
-
-}      
+	/* Pseudo-code */
+	//p[x] = x
+	//ordem[x] = 0
+	
+	S->qtsets = qtsets;
+	S->p = ;
+	S->rank = ;
+}	     
+	// Pseudo-codigo do Make_Set sera que é esse Create_DisjointSet?
+	//Cade o x?
+ 	/* Pseudo-code */
+	//p[x] = x
+	//ordem[x] = 0 
 
 /*  Find_Set(S,x): determina o representante do elemento x.
     Pseudo-código no livro do Cormen et al  */
 int Find_Set(tdisjointset *S, int x) {
-
+	/* Pseudo-code */
+	//if x != p[x]
+	//then p[x] = Find_Set(p[x])
+	//return p[x]
+	
+	if(x != S->p) S->p = Find_Set(&S, S->p);
+	return S->p;
 }    
 
 /*  Link: subrotina da funcao Union, tem como entradas 
@@ -54,12 +71,20 @@ int Find_Set(tdisjointset *S, int x) {
     a raiz da arvore mais alta como representante dos 
     elementos da arvore mais baixa */
 void Link(tdisjointset *S, int x, int y) {
-
+	/* Pseudo-code */
+	//if ordem[x] > ordem[y]
+	//	then p[y] = x
+	//else p[x] = y
+	//if ordem[x] == ordem[y]
+	//then ordem[y] = ordem[y] + 1
+	
 }
 
 /* Union(S,x,y): faz a uniao das raizes das arvores de x e de y*/
 void Union(tdisjointset *S, int x, int y) {
-
+	/* Pseudo-code */
+	//Link(Find_Set(x),Find_Set(y))
+	Link(&S,Find_Set(&S, x),Find_Set(&S,y));
 }
 
 /* Print_DisjointSet: imprime o representante de cada elemento 
@@ -180,5 +205,19 @@ int main (int argc, char *argv[]) {
           faca a uniao dessas duas componentes e escolha (u,v) para inserir na arvore; 
           caso contrario, ignore a aresta (u,v)
   */   
+
+
+	/* Pseudo-code */
+	//Kruskal(G,w)
+	// A = 0
+	//for cada vertice v de V[G]
+	//	do Make_Set(v)
+	//ordernar as arestas de E por peso e w nao descrescente
+	//for cada aresta (u,v) de E, em rodem de peso não descrescente
+	//	do if Find_Set(u) != Find_Set(v)
+	//		then A = Union(A, (u,v))
+	//return A
+	
+	//Entendi menos ainda este daqui
 
 }
