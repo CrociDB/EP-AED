@@ -4,4 +4,4 @@ make && echo '
 
 Executando:
 
-' && ./trabalho
+' && ./ep grafo01.txt saida01.txt

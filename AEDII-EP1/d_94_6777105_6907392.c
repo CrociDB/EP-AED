@@ -45,8 +45,8 @@ void Create_DisjointSet(tdisjointset *S, int qtsets){
 	//ordem[x] = 0
 	
 	S->qtsets = qtsets;
-	S->p = ;
-	S->rank = ;
+	S->p = 0;
+	S->rank = 0;
 }	     
 	// Pseudo-codigo do Make_Set sera que é esse Create_DisjointSet?
 	//Cade o x?
@@ -179,11 +179,17 @@ int Read_Edges(char* filename, tedgearray *E, int *qtvert) {
 
 /*
   Funcao Print_Edges: imprime o conjunto de arestas armazenadas
-  (opcional, serve para depurar o código)
+  (opcional, serve para depurar o código) */
 void Print_Edges(tedgearray *E) {
+   int i;
 
+   printf("Imprimindo os edges:\n");
+
+   for (i = 0; i < E->qtedges; i++) {
+      printf(" ~> V1: %d, V2: %d, TWEIGHT: %f\n", E->edges[i].v1, E->edges[i].v2, E->edges[i].weight);
+   }
 }
-*/
+
 
 /* Funcao auxiliar de comparação entre pesos das arestas, utilizada pelo quicksort */
 int comp(const void *a, const void *b) {
@@ -192,9 +198,19 @@ int comp(const void *a, const void *b) {
 
      
 int main (int argc, char *argv[]) {
-  // Declare suas variaveis
+   // Declare suas variaveis
+   tedgearray edges;
+   int edgesNum = 0;
     
-  // Leitura das arestas do grafo
+   // Leitura das arestas do grafo
+   if (argc < 2) {
+      printf("FALTANDO ARGUMENTOS!");
+      return 0;
+   }
+
+   int teste = Read_Edges(argv[1], &edges, &edgesNum);
+
+   Print_Edges(&edges);
     
   /* 
     Algoritmo de Kruskal:
