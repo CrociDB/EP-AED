@@ -1,32 +1,21 @@
-#include<stdlib.h>
-#include<stdio.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 typedef double tweight;
 
-/* 
-  tipo estruturado tdisjointset: contem o numero de elementos
-  e os vetores de informacoes de cada elemento: seu representante e seu rank
-*/
 typedef struct tdisjointset{
-  int qtsets;  // numero de subconjuntos
-  int *p;      // representante de cada elemento
-  int *rank;   // rank de cada elemento (limite superior de sua altura)
+  int qtsets;
+  int *p;
+  int *rank;
 }tdisjointset;
 
-/* 
-  tipo estruturado tedge: 
-    vertice origem, vertice destino, peso
-*/
 typedef struct tedge {
   int v1;
   int v2;
   tweight weight;
 }tedge;
 
-/* 
-  tipo estruturado tedgearray
-    contem o numero de arestas e o arranjo de arestas
-*/
 typedef struct tedgearray {
   int qtedges;
   tedge *edges;
@@ -36,40 +25,34 @@ typedef struct tedgearray {
 /********** 
   Funcoes referentes a conjuntos disjuntos
  **********/ 
-
-/* Create_DisjointSet: Inicializa a estrutura S, criando conjuntos 
-   unitarios */
+ 
 void Create_DisjointSet(tdisjointset *S, int qtsets){
 	/* Pseudo-code */
 	//p[x] = x
 	//ordem[x] = 0
 	
 	S->qtsets = qtsets;
-	S->p = 0;
-	S->rank = 0;
-}	     
-	// Pseudo-codigo do Make_Set sera que é esse Create_DisjointSet?
-	//Cade o x?
- 	/* Pseudo-code */
-	//p[x] = x
-	//ordem[x] = 0 
+	
+	S->p = (int) malloc(qtsets * sizeof(int));
+	S->rank = (int) malloc(qtsets * sizeof(int));
 
-/*  Find_Set(S,x): determina o representante do elemento x.
-    Pseudo-código no livro do Cormen et al  */
+   int i;
+   for (i = 0; i < qtsets; i++) {
+      S->p[i]= i;
+      S->rank[i] = 0;
+   }
+}	     
+
 int Find_Set(tdisjointset *S, int x) {
 	/* Pseudo-code */
 	//if x != p[x]
 	//then p[x] = Find_Set(p[x])
 	//return p[x]
 	
-	if(x != S->p) S->p = Find_Set(&S, S->p);
-	return S->p;
+	if(x != S->p[x]) S->p[x] = Find_Set(S, S->p[x]);
+	return S->p[x];
 }    
 
-/*  Link: subrotina da funcao Union, tem como entradas 
-    raizes x e y de duas sub-arvores, e transforma
-    a raiz da arvore mais alta como representante dos 
-    elementos da arvore mais baixa */
 void Link(tdisjointset *S, int x, int y) {
 	/* Pseudo-code */
 	//if ordem[x] > ordem[y]
@@ -78,63 +61,41 @@ void Link(tdisjointset *S, int x, int y) {
 	//if ordem[x] == ordem[y]
 	//then ordem[y] = ordem[y] + 1
 	
+	if (S->rank[x] > S->rank[y]) {
+	   S->p[y] = x;
+	} else {
+	   S->p[x] = y;
+	   if (S->rank[x] == S->rank[y]) {
+	      S->rank[y] = S->rank[y] + 1;
+	   }
+	}
+	
 }
 
-/* Union(S,x,y): faz a uniao das raizes das arvores de x e de y*/
 void Union(tdisjointset *S, int x, int y) {
 	/* Pseudo-code */
 	//Link(Find_Set(x),Find_Set(y))
-	Link(&S,Find_Set(&S, x),Find_Set(&S,y));
+	
+	Link(S,Find_Set(S, x),Find_Set(S, y));
 }
 
-/* Print_DisjointSet: imprime o representante de cada elemento 
-   (opcional, servirah para depurar o codigo)
 void Print_DisjointSet(tdisjointset *S) {
 
+   printf("Imprimindo Conjuntos Disjuntos:\n");
+
+   int i;
+   for (i = 0; i < S->qtsets; i++) {
+      printf(" ~> P[%d] = %d, RANK = %d\n", i, S->p[i], S->rank[i]);
+   }
+
 } 
-*/
+
 
 
 /********** 
   Funcoes referentes a grafos e ao algoritmo de Kruskal
  **********/ 
 
-/*
-  Read_Edges(filename, E)
-  Le um arquivo contendo as arestas de um grafo não orientado com pesos
-  Lay-out: 
-    A 1a linha deve conter o número de vertices e o numero de arestas do grafo,
-    separados por espaço.
-    A 2a linha em diante deve conter a informacao de cada aresta, que consiste
-    no indice do vertice de origem, indice do vertice de destino e o peso da 
-    aresta, tambem separados por espacos.
-    Observações: 
-      Os vertices devem ser indexados de 0 a |V|-1
-      As arestas devem ser indexadas de 0 a |E|-1
-      Os pesos das arestas sao numeros racionais nao negativos.
-      
-  Saida: E: Estrutura contendo o arranjo de arestas preenchido
-         qtvert: numero de vertices do grafo lido
-  
-  Exemplo: O arquivo abaixo contem um grafo com 6 vertices (0,1,2,3,4,5,6) e 
-  10 arestas. 
-  
-  6	10
-  0	1	6
-  0	2	1
-  0	3	5
-  1	2	2
-  1	4	5
-  2	3	2
-  2	4	6
-  2	5	4
-  3	5	4
-  4	5	3
-
-  Codigo de saida:
-    1: leitura bem sucedida
-    0: erro na leitura do arquivo
-*/
 int Read_Edges(char* filename, tedgearray *E, int *qtvert) {
   FILE *fp;
   int qtedges;
@@ -177,9 +138,6 @@ int Read_Edges(char* filename, tedgearray *E, int *qtvert) {
   return(1);
 }      
 
-/*
-  Funcao Print_Edges: imprime o conjunto de arestas armazenadas
-  (opcional, serve para depurar o código) */
 void Print_Edges(tedgearray *E) {
    int i;
 
@@ -191,16 +149,73 @@ void Print_Edges(tedgearray *E) {
 }
 
 
-/* Funcao auxiliar de comparação entre pesos das arestas, utilizada pelo quicksort */
-int comp(const void *a, const void *b) {
+void swap(tedge* a, tedge* b) {
+  tedge tmp;
+  tmp = *a;
+  *a = *b;
+  *b = tmp;
+}
 
-};
+void sort(tedge array[], int begin, int end) {
+   int pivot = array[begin].weight;
+   int i = begin + 1, j = end, k = end;
+   tedge t;
+ 
+   while (i < j) {
+      if (array[i].weight < pivot) i++;
+      else if (array[i].weight > pivot) {
+         j--; k--;
+         t = array[i];
+         array[i] = array[j];
+         array[j] = array[k];
+         array[k] = t; }
+      else {
+         j--;
+         swap(&array[i], &array[j]);
+      }  
+   }
+   i--;
+   swap(&array[begin], &array[i]);	
+   if (i - begin > 1)
+      sort(array, begin, i);
+   if (end - k   > 1)
+      sort(array, k, end);			
+}
+
+
+
+
+void Kruskal(tedgearray *edges, int num_vertices, char *text) {
+   tdisjointset set;
+   
+   Create_DisjointSet(&set, num_vertices);
+   
+   sort(edges->edges, 0, edges->qtedges);
+   
+   
+   
+   int i;
+   for (i = 0; i < edges->qtedges; i++) {
+      int v1 = edges->edges[i].v1;
+      int v2 = edges->edges[i].v2;
+      if (Find_Set(&set, v1) != Find_Set(&set, v2)) {
+         // Aqui ele só dá Union...
+         char line[100];
+         sprintf(line, "  %d    %d     %.5f\n", v1, v2, edges->edges[i].weight);
+         strcat(text, line);
+         
+         Union(&set, v1, v2);
+      }
+   }
+
+}
+
 
      
 int main (int argc, char *argv[]) {
    // Declare suas variaveis
    tedgearray edges;
-   int edgesNum = 0;
+   int qtvert = 0;
     
    // Leitura das arestas do grafo
    if (argc < 2) {
@@ -208,34 +223,16 @@ int main (int argc, char *argv[]) {
       return 0;
    }
 
-   int teste = Read_Edges(argv[1], &edges, &edgesNum);
+   if (!Read_Edges(argv[1], &edges, &qtvert)) return 1; // Erro
 
-   Print_Edges(&edges);
-    
-  /* 
-    Algoritmo de Kruskal:
-    - Crie as componentes conexas unitarias;
-    - Ordene as arestas em ordem crescente de pesos (use o QUICKSORT);
-    - Para cada aresta (u,v) do arranjo de arestas:
-        se u e v pertencem a componentes conexas distintas da arvore, 
-          faca a uniao dessas duas componentes e escolha (u,v) para inserir na arvore; 
-          caso contrario, ignore a aresta (u,v)
-  */   
+   //Print_Edges(&edges);
 
-
-	/* Pseudo-code */
-	//Kruskal(G,w)
-	// A = 0
-	//for cada vertice v de V[G]
-	//	do Make_Set(v)
-	//ordernar as arestas de E por peso e w nao descrescente
-	//for cada aresta (u,v) de E, em rodem de peso não descrescente
-	//	do if Find_Set(u) != Find_Set(v)
-	//		then
-	//			A = A + {(u,v)} 
-	// 			Union(u,v)
-	//return A
-	
-	//Entendi menos ainda este daqui
+   char text[1024] = "";
+   Kruskal(&edges, qtvert, text);
+   
+   // Criar o arquivo de saida...
+   FILE *saida = fopen(argv[2], "w");
+   fprintf(saida, "%s", text);
+   fclose(saida);
 
 }
