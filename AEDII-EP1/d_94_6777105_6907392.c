@@ -27,40 +27,44 @@ typedef struct tedgearray {
  **********/ 
  
 void Create_DisjointSet(tdisjointset *S, int qtsets){
-	/* Pseudo-code */
-	//p[x] = x
-	//ordem[x] = 0
-	
-	S->qtsets = qtsets;
-	
-	S->p = (int) malloc(qtsets * sizeof(int));
-	S->rank = (int) malloc(qtsets * sizeof(int));
+	S->qtsets = qtsets; // Numero de conjuntos disjuntos	
+	S->p = (int) malloc(qtsets * sizeof(int)); // Variavel do representante do conjunto
+	S->rank = (int) malloc(qtsets * sizeof(int)); // Variavel do peso da aresta para chegar ao No
 
    int i;
    for (i = 0; i < qtsets; i++) {
-      S->p[i]= i;
-      S->rank[i] = 0;
+      S->p[i]= i; // Inicialmente cada No é seu proprio representante
+      S->rank[i] = 0; // Inicialmente o peso de todas as arestas eh zero
    }
+
+	/*
+	* Como são iniciados conjuntos unitarios cada No eh o proprio representante 
+	* e o peso para se chegar a tal No eh zero
+	*/
 }	     
 
 int Find_Set(tdisjointset *S, int x) {
-	/* Pseudo-code */
-	//if x != p[x]
-	//then p[x] = Find_Set(p[x])
-	//return p[x]
-	
+	/* Verifica se x eh representante de seu conjunto
+	* Caso seja, entao apenas retorna o representante do conjunto
+	* Caso contrario ele atualiza o representante do conjunto
+	* utilizando como resposta o retorno de um novo Find_Set
+	* que passa o mesmo conjunto e o representante atual
+	* do conjunto como parametros
+	*/	
 	if(x != S->p[x]) S->p[x] = Find_Set(S, S->p[x]);
 	return S->p[x];
 }    
 
 void Link(tdisjointset *S, int x, int y) {
-	/* Pseudo-code */
-	//if ordem[x] > ordem[y]
-	//	then p[y] = x
-	//else p[x] = y
-	//if ordem[x] == ordem[y]
-	//then ordem[y] = ordem[y] + 1
-	
+	/*
+	* Verifica qual entre os dois vertices (x e y)
+	* tem maior peso, se for y, entao x sera
+	* o novo representante do conjunto, caso contrario
+	* y eh o novo representante.
+	* Contudo se o peso for o mesmo,
+	* entao o peso de y eh atualizado somando-se
+	* um ao seu peso
+	*/
 	if (S->rank[x] > S->rank[y]) {
 	   S->p[y] = x;
 	} else {
@@ -73,12 +77,14 @@ void Link(tdisjointset *S, int x, int y) {
 }
 
 void Union(tdisjointset *S, int x, int y) {
-	/* Pseudo-code */
-	//Link(Find_Set(x),Find_Set(y))
-	
+	/*
+	* Realiza um link entre o representante de X e 
+	* o representante de Y do conjunto S
+	*/
 	Link(S,Find_Set(S, x),Find_Set(S, y));
 }
 
+// Funcao criada para auxialiar testes do algoritmo
 void Print_DisjointSet(tdisjointset *S) {
 
    printf("Imprimindo Conjuntos Disjuntos:\n");
@@ -138,6 +144,7 @@ int Read_Edges(char* filename, tedgearray *E, int *qtvert) {
   return(1);
 }      
 
+// Funcao utilizada para auxiliar os testes do funcionamento do codigo
 void Print_Edges(tedgearray *E) {
    int i;
 
@@ -148,7 +155,10 @@ void Print_Edges(tedgearray *E) {
    }
 }
 
-
+/*
+* Funcao que realiza uma simples troca entre duas variaveis 
+* e eh utilizada pelo QuickSort
+*/
 void swap(tedge* a, tedge* b) {
   tedge tmp;
   tmp = *a;
@@ -156,6 +166,11 @@ void swap(tedge* a, tedge* b) {
   *b = tmp;
 }
 
+/* 
+* QuickSort recurssivo adaptado para ordenar pelo peso
+* o array do tipo tedge (para isso basta utilizar a variavel
+* weight como criterio de ordenacao)
+*/
 void sort(tedge array[], int begin, int end) {
    int pivot = array[begin].weight;
    int i = begin + 1, j = end, k = end;
@@ -182,24 +197,26 @@ void sort(tedge array[], int begin, int end) {
       sort(array, k, end);			
 }
 
-
-
-
+/*
+* Algoritmo de Kruskal
+*/
 void Kruskal(tedgearray *edges, int num_vertices, char *text) {
-   tdisjointset set;
+   tdisjointset set; // Variavel que representara o conjunto
    
-   Create_DisjointSet(&set, num_vertices);
+   Create_DisjointSet(&set, num_vertices); // aqui os conjuntos unitarios sao criados
    
-   sort(edges->edges, 0, edges->qtedges);
-   
-   
+   sort(edges->edges, 0, edges->qtedges); // Ordena em ordem crescente por peso das arestas
    
    int i;
    for (i = 0; i < edges->qtedges; i++) {
-      int v1 = edges->edges[i].v1;
+	  /* Para cada par de arestas v1 e v2 
+      * verifica se possuem representantes diferentes 
+	  * e caso sejam aplica a operacao Union
+	  */
+	  int v1 = edges->edges[i].v1;
       int v2 = edges->edges[i].v2;
       if (Find_Set(&set, v1) != Find_Set(&set, v2)) {
-         // Aqui ele só dá Union...
+         // Guardando a resposta para ser colocada no arquivo de saida
          char line[100];
          sprintf(line, "  %d    %d     %.5f\n", v1, v2, edges->edges[i].weight);
          strcat(text, line);
@@ -227,8 +244,8 @@ int main (int argc, char *argv[]) {
 
    //Print_Edges(&edges);
 
-   char text[1024] = "";
-   Kruskal(&edges, qtvert, text);
+   char text[1024] = ""; // Variavel que guarda a resposta do algoritmo
+   Kruskal(&edges, qtvert, text); // Execucao do algoritmo de Kruskal
    
    // Criar o arquivo de saida...
    FILE *saida = fopen(argv[2], "w");
