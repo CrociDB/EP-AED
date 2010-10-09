@@ -119,16 +119,12 @@ int Read_Edges(char* filename, tedgearray *E, int *qtvert) {
   E->qtedges = qtedges;
   E->edges = calloc(qtedges, sizeof(tedge));
   
-  //  printf("vertices: %d ; arestas: %d \n", *qtvert, qtedges);
-  
   for (ide=0;ide<qtedges;ide++) {
     if (fscanf(fp, "%d %d %lf", &v1, &v2, &weight)!=3) {
       fclose(fp);
       free(E->edges);
       return(0);
     }
-
-    //  printf("%d - %d - %d - %lf\n",  ide, v1, v2, weight);
 
     if (v1<0 || v1>=*qtvert || v2<0 || v2>=*qtvert || weight<0) {
       fclose(fp);
@@ -239,8 +235,6 @@ int main (int argc, char *argv[]) {
    }
 
    if (Read_Edges(argv[1], &edges, &qtvert) == 0) printf("Erro na leitura de arquivo"); // Erro
-	
-   //Print_Edges(&edges);
 
    char text[4096] = ""; // Variavel que guarda a resposta do algoritmo
    Kruskal(&edges, qtvert, text); // Execucao do algoritmo de Kruskal
