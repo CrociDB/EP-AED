@@ -242,12 +242,14 @@ int main (int argc, char *argv[]) {
 	
    //Print_Edges(&edges);
 
-   char text[1024] = ""; // Variavel que guarda a resposta do algoritmo
+   char text[4096] = ""; // Variavel que guarda a resposta do algoritmo
    Kruskal(&edges, qtvert, text); // Execucao do algoritmo de Kruskal
    
    // Criar o arquivo de saida...
    FILE *saida = fopen(argv[2], "w");
    fprintf(saida, "%s", text);
    fclose(saida);
+   
+   return 1;
 
 }
