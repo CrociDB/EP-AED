@@ -226,22 +226,20 @@ void Kruskal(tedgearray *edges, int num_vertices, char *text) {
    }
 
 }
-
-
-     
+ 
 int main (int argc, char *argv[]) {
    // Declare suas variaveis
    tedgearray edges;
    int qtvert = 0;
-    
+
    // Leitura das arestas do grafo
-   if (argc < 2) {
-      printf("FALTANDO ARGUMENTOS!");
+   if (argc < 3) {
+      printf("FALTANDO ARGUMENTOS!\n");
       return 0;
    }
 
-   if (!Read_Edges(argv[1], &edges, &qtvert)) return 1; // Erro
-
+   if (Read_Edges(argv[1], &edges, &qtvert) == 0) printf("Erro na leitura de arquivo"); // Erro
+	
    //Print_Edges(&edges);
 
    char text[1024] = ""; // Variavel que guarda a resposta do algoritmo
